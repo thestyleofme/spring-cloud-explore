@@ -1,0 +1,22 @@
+server:
+  port: 8761
+spring:
+  application:
+    name: eureka-server
+eureka:
+  instance:
+    hostname: eurekaServerA
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+  client:
+    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka
+      # 集群模式下，defaultZone应该指向其他eureka server，如果有更多server实例，逗号分割
+      defaultZone: http://eurekaServerB:8762/eureka
+    # 注册中心将自己作为客户端来尝试注册自己，注册中心集群环境下需开启此配置，集群true
+    register-with-eureka: true # 当前自己就是server，不需要注册自己，单实例false
+    # 检索服务选项，注册中心不需要检索服务，集群true
+    fetch-registry: true # 查询获取注册中心的服务信息，自己就是server，不需要从eureka server获取服务信息，单实例false
+
