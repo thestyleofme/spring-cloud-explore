@@ -1,7 +1,5 @@
 package com.github.thestyleofme.resume.controller;
 
-import java.util.concurrent.TimeUnit;
-
 import com.github.thestyleofme.resume.service.ResumeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +24,7 @@ public class ResumeController {
     private final ResumeService resumeService;
 
     @Value("${server.port}")
-    private Integer port;
+    private int port;
 
     public ResumeController(ResumeService resumeService) {
         this.resumeService = resumeService;
@@ -34,12 +32,6 @@ public class ResumeController {
 
     @GetMapping("/openstate/{userId}")
     public Integer findDefaultResumeState(@PathVariable Long userId) {
-        // 模拟超时
-        try {
-            TimeUnit.SECONDS.sleep(10L);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
         log.debug("app current port: {}", port);
         return resumeService.findDefaultResumeByUserId(userId).getIsOpenResume();
     }

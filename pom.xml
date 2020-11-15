@@ -24,6 +24,7 @@
 		<module>eureka-server-8762</module>
 		<module>service-common</module>
 		<module>service-resume-8080</module>
+		<module>service-resume-8081</module>
 		<module>service-autodeliver-8090</module>
 	</modules>
 
