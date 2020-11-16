@@ -24,10 +24,10 @@ import org.springframework.web.client.RestTemplate;
 @EnableDiscoveryClient
 @EnableCircuitBreaker
 // @SpringCloudApplication
-public class AutodeliverApplication8090 {
+public class AutodeliverApplication8091 {
 
     public static void main(String[] args) {
-        SpringApplication.run(AutodeliverApplication8090.class, args);
+        SpringApplication.run(AutodeliverApplication8091.class, args);
     }
 
     @Bean

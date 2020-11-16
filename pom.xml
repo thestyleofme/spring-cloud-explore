@@ -26,6 +26,9 @@
 		<module>service-resume-8080</module>
 		<module>service-resume-8081</module>
 		<module>service-autodeliver-8090</module>
+		<module>service-autodeliver-8091</module>
+		<module>hystrix-dashboard-9000</module>
+		<module>hystrix-turbine-9001</module>
 	</modules>
 
 	<dependencies>

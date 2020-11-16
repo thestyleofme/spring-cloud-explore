@@ -1,0 +1,29 @@
+server:
+  port: 9000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+spring:
+  application:
+    name: hystrix-dashboard
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    service-url:
+      # 注册到集群，就把多个Eureka server地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
+      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
+    registry-fetch-interval-seconds: 10
+
+# https://docs.spring.io/spring-cloud-netflix/docs/2.2.6.RELEASE/reference/html/#netflix-hystrix-dashboard-starter
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "*"
