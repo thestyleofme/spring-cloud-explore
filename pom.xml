@@ -29,6 +29,7 @@
 		<module>service-autodeliver-8091</module>
 		<module>hystrix-dashboard-9000</module>
 		<module>hystrix-turbine-9001</module>
+		<module>service-autodeliver-8092</module>
 	</modules>
 
 	<dependencies>
