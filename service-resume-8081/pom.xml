@@ -17,6 +17,10 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.github.thestyleofme</groupId>
             <artifactId>service-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>

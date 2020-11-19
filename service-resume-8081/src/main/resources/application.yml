@@ -1,5 +1,3 @@
-server:
-  port: 8081
 spring:
   application:
     name: service-resume
@@ -15,21 +13,6 @@ spring:
       naming:
         # 避免将驼峰命名转换为下划线命名
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-eureka:
-  instance:
-    prefer-ip-address: true
-    lease-renewal-interval-in-seconds: 10
-    lease-expiration-duration-in-seconds: 30
-    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
-    # 自定义eureka元数据
-    metadata-map:
-      cluster: cl1
-      region: rn1
-  client:
-    service-url:
-      # 注册到集群，就把多个Eureka server地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
-      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
-    registry-fetch-interval-seconds: 10
 
 logging:
   level:

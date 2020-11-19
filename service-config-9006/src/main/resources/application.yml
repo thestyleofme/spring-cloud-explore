@@ -1,0 +1,43 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: service-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/thestyleofme/spring-cloud-explore-config-repo.git #配置git服务地址
+          username: thestyleofme #配置git用户名
+          password: xxxxxx #配置git密码
+          search-paths:
+            - demo
+      # 读取分支
+      # http://localhost:9006/main/service-resume-dev.yml
+      label: main
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    service-url:
+      # 注册到集群，就把多个Eureka server地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
+      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
+    registry-fetch-interval-seconds: 10
+
+logging:
+  level:
+    com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+
+# springboot中暴露健康检查等断点接口
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接口的细节
+  endpoint:
+    health:
+      show-details: always

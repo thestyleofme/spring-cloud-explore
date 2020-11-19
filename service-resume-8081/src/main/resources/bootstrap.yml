@@ -1,0 +1,47 @@
+server:
+  port: 8081
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接口的细节
+  endpoint:
+    health:
+      show-details: always
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:default}
+  cloud:
+    config:
+      fail-fast: false
+      enabled: ${SPRING_CLOUD_CONFIG_ENABLED:true}
+      # 配置中心地址
+      uri: ${SPRING_CLOUD_CONFIG_URI:http://localhost:9006}
+      # ${name}-${profile}.yml
+      name: service-resume
+      profile: dev
+      # 分支名称
+      label: main
+      retry:
+        # 最大重试次数
+        maxAttempts: 6
+        multiplier: 1.1
+        # 重试间隔时间
+        maxInterval: 2000
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+    # 自定义eureka元数据
+    metadata-map:
+      cluster: cl1
+      region: rn1
+  client:
+    service-url:
+      # 注册到集群，就把多个Eureka server地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
+      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
+    registry-fetch-interval-seconds: 10
