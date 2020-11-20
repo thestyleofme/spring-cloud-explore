@@ -15,6 +15,12 @@ spring:
       # 读取分支
       # http://localhost:9006/main/service-resume-dev.yml
       label: main
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
 eureka:
   instance:
     prefer-ip-address: true

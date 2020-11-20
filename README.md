@@ -1,8 +1,8 @@
-# spring-cloud-explore
+## spring-cloud-explore
 
 * eureka server/client
 * ribbon
-* hystix/dashboard/turbine
+* hystrix/dashboard/turbine
 * feign
 * gateway
-* config
+* config+bus
