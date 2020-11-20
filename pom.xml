@@ -32,12 +32,19 @@
 		<module>service-autodeliver-8092</module>
 		<module>service-gateway-9002</module>
 		<module>service-config-9006</module>
+        <module>stream-producer-9090</module>
+        <module>stream-consumer-9091</module>
+		<module>stream-consumer-9092</module>
 	</modules>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
 

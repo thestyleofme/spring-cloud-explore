@@ -1,0 +1,47 @@
+server:
+  port: 9092
+spring:
+  application:
+    name: stream-consumer
+  cloud:
+    stream:
+      binders: # 绑定mq服务信息
+        demoRabbitBinder: # 名称定义，用于后面的关联
+          type: rabbit # mq类型
+          environment: # mq环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings: # 关联整合
+        input:
+          destination: demoExchange # 要使用的消息队列主题名称
+          content-type: text/plain # application/json # 消息类型设置
+          binder: demoRabbitBinder # 关联mq服务
+          group: demoGroup
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 10
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}:@project.version@
+  client:
+    service-url:
+      # 注册到集群，就把多个Eureka server地址使用逗号连接起来即可；注册到单实例（非集群模式），那就写一个就ok
+      defaultZone: http://eurekaServerA:8761/eureka,http://eurekaServerB:8762/eureka
+    registry-fetch-interval-seconds: 10
+
+logging:
+  level:
+    com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
