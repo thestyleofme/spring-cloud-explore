@@ -6,3 +6,4 @@
 * feign
 * gateway
 * config+bus
+* sleuth+zipkin

@@ -1,6 +1,13 @@
 spring:
   application:
     name: service-resume
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1 # 采样率 1代表全部采集 默认0.1
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/spring_cloud_explore?useUnicode=true&characterEncoding=utf-8&useSSL=false
@@ -18,3 +25,5 @@ logging:
   level:
     org.apache.ibatis: ${LOGGING_LEVEL:debug}
     com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.sleuth: debug

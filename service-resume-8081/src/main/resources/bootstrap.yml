@@ -15,7 +15,7 @@ spring:
   cloud:
     config:
       fail-fast: false
-      enabled: ${SPRING_CLOUD_CONFIG_ENABLED:true}
+      enabled: ${SPRING_CLOUD_CONFIG_ENABLED:false}
       # 配置中心地址
       uri: ${SPRING_CLOUD_CONFIG_URI:http://localhost:9006}
       # ${name}-${profile}.yml

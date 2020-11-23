@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -30,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author isaac 2020/11/20 3:08
  * @since 1.0.0
  */
-@RestController
+// @RestController 暂时不使用config注册中心
 @RequestMapping("/config")
 @Slf4j
 @RefreshScope

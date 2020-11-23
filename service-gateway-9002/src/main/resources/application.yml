@@ -3,6 +3,13 @@ server:
 spring:
   application:
     name: service-gateway
+  zipkin:
+    base-url: http://localhost:9411
+    sender:
+      type: web
+  sleuth:
+    sampler:
+      probability: 1
   cloud:
     gateway:
       routes: # 路由可以有多个
@@ -42,6 +49,8 @@ eureka:
 logging:
   level:
     com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.sleuth: debug
 
 # 暴露spring boot健康检查等端点接口
 management:
@@ -54,45 +63,3 @@ management:
   endpoint:
     health:
       show-details: always
-
-# 针对的被调用方微服务名称,不加就是全局生效
-service-resume:
-  ribbon:
-    # 请求连接超时时间
-    ConnectTimeout: 3000
-    ##########################################Feign超时时长设置
-    # 请求处理超时时间 即客户端读取超时时间，超时时间要小于Hystrix的超时时间，否则重试机制就无意义了
-    ReadTimeout: 15000
-    # 对所有操作都进行重试
-    # 访问实例失败(超时)，允许自动重试，设置重试次数，失败后会更换实例访问
-    # 请一定确保接口的幂等性，否则重试可能导致数据异常。
-    OkToRetryOnAllOperations: true
-    ####根据如上配置，当访问到故障请求的时候，它会再尝试访问一次当前实例（次数由MaxAutoRetries配置），
-    ####如果不行，就换一个实例进行访问，如果还不行，再换一次实例访问（更换次数由MaxAutoRetriesNextServer配置），
-    ####如果依然不行，返回失败信息。
-    MaxAutoRetries: 0 #对当前选中实例重试次数，不包括第一次调用
-    MaxAutoRetriesNextServer: 0 #切换实例的重试次数
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #负载策略调整
-
-feign:
-  hystrix:
-    enabled: true
-  # feign的请求响应压缩
-#  compression:
-#    request:
-#      enabled: true
-#      # 默认
-#      min-request-size: 2048
-#      # 默认
-#      mime-types: text/html,application/xml,application/json
-#    response:
-#      enabled: true
-
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            # 熔断超时设置，默认为1s
-            timeoutInMilliseconds: 20000
