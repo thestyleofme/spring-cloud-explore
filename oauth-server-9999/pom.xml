@@ -9,11 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>service-autodeliver-8092</artifactId>
-
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+    <artifactId>oauth-server-9999</artifactId>
 
     <dependencies>
         <!-- oauth2 start-->
@@ -40,15 +36,7 @@
         <!-- oauth2 end-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-zipkin</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,5 +59,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

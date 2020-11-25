@@ -36,7 +36,8 @@
         <module>stream-consumer-9091</module>
 		<module>stream-consumer-9092</module>
 		<module>zipkin-server-9411</module>
-	</modules>
+        <module>oauth-server-9999</module>
+    </modules>
 
 	<dependencies>
 		<dependency>
