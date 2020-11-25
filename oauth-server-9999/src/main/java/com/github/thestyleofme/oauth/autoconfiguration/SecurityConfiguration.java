@@ -1,14 +1,11 @@
 package com.github.thestyleofme.oauth.autoconfiguration;
 
-import java.util.Collections;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,11 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final PasswordEncoder passwordEncoder;
-
-    public SecurityConfiguration(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JdbcUserDetailsService jdbcUserDetailsService;
 
     /**
      * 注册一个认证管理器对象到容器
@@ -54,11 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // 在这个方法中就可以去关联数据库了，当前我们先把用户信息配置在内存中
-        // 实例化一个用户对象(相当于数据表中的一条用户记录)
-        UserDetails user = new User("admin", "123456", Collections.emptyList());
-        auth.inMemoryAuthentication()
-                .withUser(user)
-                .passwordEncoder(passwordEncoder);
+        // 关联数据库查询用户
+        auth.userDetailsService(jdbcUserDetailsService).passwordEncoder(passwordEncoder);
     }
 }

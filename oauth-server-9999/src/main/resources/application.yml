@@ -3,6 +3,16 @@ server:
 spring:
   application:
     name: service-oauth2
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring_cloud_explore?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true
+    username: root
+    password: tse@9527
+    druid:
+      initialSize: 10
+      minIdle: 10
+      maxActive: 30
+      maxWait: 50000
 eureka:
   instance:
     prefer-ip-address: true

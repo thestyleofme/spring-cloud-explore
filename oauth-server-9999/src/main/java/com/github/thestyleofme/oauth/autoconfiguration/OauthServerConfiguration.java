@@ -1,17 +1,24 @@
 package com.github.thestyleofme.oauth.autoconfiguration;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.jwt.crypto.sign.MacSigner;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 /**
  * <p>
@@ -26,11 +33,17 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @EnableAuthorizationServer
 public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-    private final AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private CusAccessTokenConverter cusAccessTokenConverter;
+    @Autowired
+    private JdbcClientDetailsService jdbcClientDetailsService;
 
-    public OauthServerConfiguration(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+    /**
+     * jwt签名密钥
+     */
+    private static final String SIGN_KEY = "jwt_sign_key123";
 
     /**
      * 认证服务器最终是以api接口的方式对外提供服务(校验合法性并生成令牌、校验令牌等)
@@ -53,19 +66,13 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients
-                // 客户端信息存储在什么地方，可以在内存中，可以在数据库里
-                .inMemory()
-                // 添加一个client配置,指定其client_id
-                .withClient("c1")
-                // 指定客户端的密码/安全码
-                .secret("secret")
-                // 指定客户端所能访问资源id清单，此处的资源id是需要在具体的资源服务器上也配置一样
-                .resourceIds("autodeliver")
-                // 认证类型/令牌颁发模式，可以配置多个在这里，但是不一定都用，具体使用哪种方式颁发token，需要客户端调用的时候传递参数指定
-                .authorizedGrantTypes("password", "refresh_token")
-                // 客户端的权限范围，此处配置为all全部即可
-                .scopes("all");
+        // 从数据库中加载客户端详情
+        clients.withClientDetails(jdbcClientDetailsService);
+    }
+
+    @Bean
+    public JdbcClientDetailsService createJdbcClientDetailsService(DataSource dataSource) {
+        return new JdbcClientDetailsService(dataSource);
     }
 
     /**
@@ -90,7 +97,22 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
      * @return TokenStore
      */
     public TokenStore tokenStore() {
-        return new InMemoryTokenStore();
+        return new JwtTokenStore(jwtAccessTokenConverter());
+    }
+
+    /**
+     * 返回jwt令牌转换器（帮助我们生成jwt令牌的）
+     * 在这里，我们可以把签名密钥传递进去给转换器对象
+     */
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        // 签名密钥
+        jwtAccessTokenConverter.setSigningKey(SIGN_KEY);
+        // 验证时使用的密钥，和签名密钥保持一致
+        jwtAccessTokenConverter.setVerifier(new MacSigner(SIGN_KEY));
+        // token中放一些自定义信息
+        jwtAccessTokenConverter.setAccessTokenConverter(cusAccessTokenConverter);
+        return jwtAccessTokenConverter;
     }
 
     /**
@@ -102,6 +124,9 @@ public class OauthServerConfiguration extends AuthorizationServerConfigurerAdapt
         // 是否开启令牌刷新
         defaultTokenServices.setSupportRefreshToken(true);
         defaultTokenServices.setTokenStore(tokenStore());
+
+        // 针对jwt令牌的添加
+        defaultTokenServices.setTokenEnhancer(jwtAccessTokenConverter());
 
         // 设置令牌有效时间（一般设置为2个小时）
         // access_token就是我们请求资源需要携带的令牌
