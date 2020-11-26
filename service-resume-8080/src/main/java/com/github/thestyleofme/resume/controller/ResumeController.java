@@ -40,8 +40,9 @@ public class ResumeController {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        log.debug("app current port: {}", port);
-        return resumeService.findDefaultResumeByUserId(userId).getIsOpenResume();
+        Integer isOpenResume = resumeService.findDefaultResumeByUserId(userId).getIsOpenResume();
+        log.debug("isOpenResume: {}",isOpenResume);
+        return port;
     }
 
 }

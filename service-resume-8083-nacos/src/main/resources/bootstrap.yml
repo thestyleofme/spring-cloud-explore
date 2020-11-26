@@ -1,0 +1,22 @@
+server:
+  port: 8083
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 暴露健康接口的细节
+  endpoint:
+    health:
+      show-details: always
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:default}
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848,127.0.0.1:8849,127.0.0.1:8850
+        # 不同的命名空间是隔离的，其中的服务不能互相调用
+#        namespace: 514c3d38-2917-4a89-8916-b358fdf4ce02
+        # 优先选择同一集群下的服务
+        cluster-name: BJ

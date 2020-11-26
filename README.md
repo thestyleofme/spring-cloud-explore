@@ -7,3 +7,5 @@
 * gateway
 * config+bus
 * sleuth+zipkin
+* oauth2+jwt
+* nacos
