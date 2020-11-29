@@ -8,4 +8,4 @@
 * config+bus
 * sleuth+zipkin
 * oauth2+jwt
-* nacos
+* nacos server/client & nacos config
