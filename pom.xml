@@ -26,9 +26,13 @@
         <module>service-resume-8080</module>
         <module>service-resume-8081</module>
         <module>service-resume-8082-nacos</module>
+        <module>service-resume-8083-nacos</module>
+        <module>service-resume-8084-nacos-sentinel-dubbo</module>
         <module>service-autodeliver-8090</module>
         <module>service-autodeliver-8091</module>
         <module>service-autodeliver-8093-nacos</module>
+        <module>service-autodeliver-8094-sentinel</module>
+        <module>service-autodeliver-8095-nacos-sentinel-dubbo</module>
         <module>hystrix-dashboard-9000</module>
         <module>hystrix-turbine-9001</module>
         <module>service-autodeliver-8092</module>
@@ -39,7 +43,7 @@
         <module>stream-consumer-9092</module>
         <module>zipkin-server-9411</module>
         <module>oauth-server-9999</module>
-        <module>service-resume-8083-nacos</module>
+        <module>service-dubbo-api</module>
     </modules>
 
     <dependencies>
@@ -55,7 +59,7 @@
 
     <dependencyManagement>
         <dependencies>
-			<!--SCN-->
+            <!--SCN-->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -63,7 +67,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-			<!--SCN-->
+            <!--SCN-->
 
             <!--SCA-->
             <dependency>
@@ -74,6 +78,18 @@
                 <scope>import</scope>
             </dependency>
             <!--SCA-->
+
+            <!--plugin-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -9,3 +9,5 @@
 * sleuth+zipkin
 * oauth2+jwt
 * nacos server/client & nacos config
+* sentinel
+* nacos + sentinel + dubbo

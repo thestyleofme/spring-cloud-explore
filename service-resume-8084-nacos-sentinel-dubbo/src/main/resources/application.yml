@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: service-resume
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/spring_cloud_explore?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: tse@9527
+  jpa:
+    database: MySQL
+    show-sql: true
+    hibernate:
+      naming:
+        # 避免将驼峰命名转换为下划线命名
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+dubbo:
+  application:
+    id: ${spring.application.name}
+    qos-enable: false
+  protocol:
+    # dubbo 协议
+    name: dubbo
+    # dubbo 协议端口（ -1 表示自增端口，从 20880 开始）
+    port: -1
+    host: 127.0.0.1
+  registry:
+    # 挂载到 Spring Cloud 的注册中心
+    address: spring-cloud://localhost
+
+
+logging:
+  level:
+    org.apache.ibatis: ${LOGGING_LEVEL:debug}
+    com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+    com.alibaba.cloud: ${LOGGING_LEVEL:debug}

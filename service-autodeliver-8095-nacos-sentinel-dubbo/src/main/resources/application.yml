@@ -1,0 +1,59 @@
+server:
+  port: 8095
+spring:
+  application:
+    name: service-autodeliver
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848,127.0.0.1:8849,127.0.0.1:8850
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:8080
+        port: 8719
+      # Sentinel Nacos数据源配置，Nacos中的规则会自动同步到sentinel流控规则中
+      datasource:
+        # 自定义的流控规则数据源名称
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            data-id: ${spring.application.name}-flow-rules
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: flow  # 类型来自RuleType类
+        # 自定义的降级规则数据源名称
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            data-id: ${spring.application.name}-degrade-rules
+            groupId: DEFAULT_GROUP
+            data-type: json
+            rule-type: degrade  # 类型来自RuleType类
+
+dubbo:
+  application:
+    id: ${spring.application.name}
+    qos-enable: false
+  registry:
+    # 挂载到 Spring Cloud 的注册中心
+    address: spring-cloud://localhost
+  cloud:
+    subscribed-services: service-resume
+
+logging:
+  level:
+    org.apache.ibatis: ${LOGGING_LEVEL:debug}
+    com.github.thestyleofme: ${LOGGING_LEVEL:debug}
+    com.alibaba.cloud: ${LOGGING_LEVEL:debug}
+
+# 暴露spring boot健康检查等端点接口
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  # 总是暴露健康检查接口细节
+  # http://localhost:8090/actuator/health
+  endpoint:
+    health:
+      show-details: always
